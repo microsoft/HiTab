@@ -72,7 +72,7 @@ HiTab dataset consists of three `.jsonl` files for train/dev/test samples and a 
 }
 ```
 
-+ **Meta Data**: `id` is the unique ids of each sample. The other ids describe the detailed information in annotations and `table_source` shows which source the table comes from. 
++ **Meta Data**: `id` is the unique id of each sample. The other ids describe the detailed information in annotations and `table_source` shows which source the table comes from. 
 + **Task Data**:  `sub_sentence` is "text" in data2text task. `key_part` is the questioned part in sub-sentence. `question` and `answer` are for question answering task.
 + **Links and Compositions**: `aggregation` is the aggregation(s) to derive the answer. `linked_cells` are the regarded cells in both tasks. `answer_formulas` are formulas about how cells composite to derive the answer. `reference_cells_map` are the referenced cells to current cell coordinate in the table matrix. 
   + **Linked Cells**: `linked_cells` are divided into `entity_link` (not in data region) and `quantity_link` (cells in data region). `entity_link` are further classified into `top` (top header), `left` (left header) and `top-left-corner` (on the top-left corner of table). The **key** of each link is the phrase in the sub-sentence, like *"correctional services"*. The **value** contains key-value pairs in format **cell coordinate - cell string** in table, like *"(0, 7)": "total correctional services"* .  *[ANSWER]* is a special key as it stands for the cells that composite to derive the answer. Usually *[ANSWER]* appears in `quantity_link`, but sometimes it can be in `entity_link` if the answer is a header.
