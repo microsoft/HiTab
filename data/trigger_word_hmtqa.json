@@ -1,0 +1,62 @@
+{
+  "argmax": [
+    "JJR",
+    "JJS",
+    "RBR",
+    "RBS",
+    "top",
+    "first",
+    "bottom",
+    "last"
+  ],
+  "argmin": [
+    "JJR",
+    "JJS",
+    "RBR",
+    "RBS",
+    "top",
+    "first",
+    "bottom",
+    "last"
+  ],
+  "count": [
+    "how", 
+    "many", 
+    "total", 
+    "number"
+  ], 
+  "diff": [
+    "difference", 
+    "more", 
+    "than",
+    "change",
+    "compared",
+    "compare",
+    "JJR",
+    "RBR"
+  ],
+  "proportion": [
+    "times",
+    "percent",
+    "percentage",
+    "fraction"
+  ],
+  "max": [
+    "JJS",
+    "RBS"
+  ], 
+  "min": [
+    "JJS",
+    "RBS"
+  ],
+  "average": [
+    "average",
+    "mean"
+  ],
+  "sum": [
+    "all", 
+    "combine", 
+    "total",
+    "sum"
+  ]
+}
