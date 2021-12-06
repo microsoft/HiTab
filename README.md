@@ -1,6 +1,6 @@
 # HiTab : A Hierarchical Table Dataset for Question Answering and Natural Language Generation
 
-HiTab is a dataset for question answering and data-to-text over hierarchical tables . It contains 10,674 samples and 3,597 tables from statistical reports ([StatCan](https://www.statcan.gc.ca/), [NSF](https://www.nsf.gov/)) and Wikipedia ([ToTTo](https://github.com/google-research-datasets/ToTTo)).  98.1% of the tables in HiTab are with hierarchies.  You can find more details in [our paper](https://arxiv.org/abs/2108.06712).
+HiTab is a dataset for question answering and data-to-text over hierarchical tables . It contains 10,686 samples and 3,597 tables from statistical reports ([StatCan](https://www.statcan.gc.ca/), [NSF](https://www.nsf.gov/)) and Wikipedia ([ToTTo](https://github.com/google-research-datasets/ToTTo)).  98.1% of the tables in HiTab are with hierarchies.  You can find more details in [our paper](https://arxiv.org/abs/2108.06712).
 
 During the dataset annotation process, annotators first manually collect tables and  descriptive sentences highly-related to tables on statistical websites written by professional analysts. And then these descriptions are revised to questions to preserve the original meanings and analyses.
 
@@ -10,8 +10,12 @@ We hope HiTab can serve as a useful benchmark for table understanding on hierarc
 
 ## :beers: Updates
 
-+ **Stay tuned!**: Code of question answering and data2text.
-
++ **Stay tuned!**: Code of data2text.
++ **2021-12-6**: We released code of question answering and a new version HiTab data. 
+Several modifications on data: (1) more precise hierarchies are derived for \~3\% tables with new heuristic algorithms; 
+(2) fix the problem that \~0.6\% tables ranges were not correctly extracted from original excel file; 
+(3) temporarily set aside \~1.5\% samples for further check containing unreliable answers or aggregations, which hopefully won't affect evaluating new methods due to the small proportion. 
+We'll release the final version HiTab version after checking. Thank you for your patience.
 + **2021-9-2**: We released full HiTab data, including (1) question answering and data2text samples, (2) tables with parsed hierarchies.
 
 
@@ -30,7 +34,6 @@ HiTab dataset consists of three `.jsonl` files for train/dev/test samples and a 
   "sentence_id": "5895",
   "sub_sentence_id": "1",
   "sub_sentence": "in 2013/2014, on any given day, there were on average 139,337 adult offenders being supervised in either provincial/territorial or federal correctional services",
-  "key_part": "139,337",
   "question": "in 2013/2014, on any given day, how many adult offenders are being supervised in either provincial/territorial or federal correctional services?",
   "answer": [
     139337
@@ -73,12 +76,11 @@ HiTab dataset consists of three `.jsonl` files for train/dev/test samples and a 
 ```
 
 + **Meta Data**: `id` is the unique id of each sample. The other ids describe the detailed information in annotations and `table_source` shows which source the table comes from. 
-+ **Task Data**:  `sub_sentence` is "text" in data2text task. `key_part` is the questioned part in sub-sentence. `question` and `answer` are for question answering task.
++ **Task Data**:  `sub_sentence` is "text" in data2text task. `question` and `answer` are for question answering task.
 + **Links and Compositions**: `aggregation` is the aggregation(s) to derive the answer. `linked_cells` are the regarded cells in both tasks. `answer_formulas` are formulas about how cells composite to derive the answer. `reference_cells_map` are the referenced cells to current cell coordinate in the table matrix. 
   + **Linked Cells**: `linked_cells` are divided into `entity_link` (not in data region) and `quantity_link` (cells in data region). `entity_link` are further classified into `top` (top header), `left` (left header) and `top-left-corner` (on the top-left corner of table). The **key** of each link is the phrase in the sub-sentence, like *"correctional services"*. The **value** contains key-value pairs in format **cell coordinate - cell string** in table, like *"(0, 7)": "total correctional services"* .  *[ANSWER]* is a special key as it stands for the cells that composite to derive the answer. Usually *[ANSWER]* appears in `quantity_link`, but sometimes it can be in `entity_link` if the answer is a header.
 
 The cell coordinates above are under the coordinate system of the table matrix provided in following table format.
-
 
 
 ### Table Format
@@ -141,7 +143,7 @@ The cell coordinates above are under the coordinate system of the table matrix p
 
 
 
-```
+```json
 { 
   "texts": [
     [
@@ -160,7 +162,7 @@ The cell coordinates above are under the coordinate system of the table matrix p
       ""
     ],...
   ],
-    "merged_regions": [
+  "merged_regions": [
     {
       "first_row": 0,
       "last_row": 0,
@@ -179,6 +181,29 @@ The cell coordinates above are under the coordinate system of the table matrix p
 
 `texts` is the complete table matrix consisting $M$ rows and $N$ columns. `merged_regions` lists all the merged cells. If a cell is a merged cells, only its **core cell**  (the top left position in the merged cell) will have content in `texts`, and others will be empty.
 
+
+## Question Answering
+The question answering codebase references [pytorch version of MAPO](https://github.com/pcyin/pytorch_neural_symbolic_machines) 
+and [TaBERT](https://github.com/facebookresearch/TaBERT). 
+
+Weakly supervised Table QA usually requires consistent programs for warm start and alignments between question and table schemas or headers as input features,
+which we already provide as `data/explore/saved_programs.json`, and `data/processed_input/`. 
+Users can also start with raw data format, i.e. `data/*_samples.jsonl`, by searching programs with `qa/table/random_explore.py` and extract question-table alignments with `qa/datadump/process_input.py`.
+
+
+### Quick Start
+Here is a very quick start script for "MAPO with hierarchical-aware logical form" method in HiTab paper.
+```shell
+# unzip table files
+unzip data/ data/tables.zip
+# set 'MY_PATH_TO' in config as the path to the project
+vim qa/config/config.vanilla_bert.json
+# train
+bash train_hmtqa.sh
+# test
+bash test_hmtqa.sh
+```
+The training takes \~10 hours on 4 V100 GPUs.
 
 
 ## Reference
