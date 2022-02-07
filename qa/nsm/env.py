@@ -476,7 +476,7 @@ class QAProgrammingEnv(Environment):
         """ Reward of matching selected region."""
         if selected_region is None:  # region selection not complete
             return 0
-        if len(data_cells) == 0:  # TODO: maybe empty 'quantity_link'
+        if len(data_cells) == 0:
             return 0
         left_ids, top_ids = selected_region.left_ids, selected_region.top_ids
         selected_region_data = [self.kg['kg'].data_region[left_id][top_id].value   # already List[float]

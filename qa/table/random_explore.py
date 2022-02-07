@@ -50,7 +50,7 @@ def random_explore(env,
                                                    allow_not_contain=args.allow_not_contain,
                                                    allow_union_header=args.allow_union_header,
                                                    )
-        if args.use_entity_link:  # add constraint with annotated entity links and aggregation
+        if args.use_linked_cells:  # add constraint with annotated entity links and aggregation
             new_valid_actions = add_weights_to_action(env,
                                                       new_valid_actions)
             new_valid_actions = add_entity_link_constraints(env,
@@ -74,7 +74,7 @@ def random_explore(env,
 
 def union_headers_both_in_entity_link(env):
     """ Assert if selecting union headers, they have to be both in entity links."""
-    if not args.use_entity_link:
+    if not args.use_linked_cells:
         return True
     i = 0
     while i < len(env.mapped_actions):
@@ -100,8 +100,10 @@ def add_weights_to_action(env, valid_actions):
         if action in env.entity_link_actions or action in env.aggregation_actions:  # add weights of annotated tokens
             new_valid_actions.extend([action] * W * num_actions)
         else:
+            # TODO: should change the code when new functions are added
+            aggr_action_start, aggr_action_end = env.de_vocab.lookup('max'), env.de_vocab.lookup('opposite')
             if not env.aggregation_actions and action in list(
-                    range(7, 20)):  # no aggregation, remove all operations  # TODO: too tricky, do not use function id
+                    range(aggr_action_start, aggr_action_end + 1)):  # no aggregation, remove all operations
                 continue
             else:
                 new_valid_actions.append(action)
@@ -120,7 +122,7 @@ def add_manual_constraints(env, valid_actions,
         if env.de_vocab.lookup('filter_tree_str_not_contain') in valid_actions:
             valid_actions.remove(env.de_vocab.lookup('filter_tree_str_not_contain'))
     # whether to allow two headers in one 'filter tree'
-    if not args.use_entity_link:
+    if not args.use_linked_cells:
         union_words = {'or', 'and'}  # union trigger words
         if not (union_words & set(env.question_annotation['tokens'])):
             allow_union_header = False
@@ -242,6 +244,7 @@ def run_random_exploration(shard_id):
         for env in all_envs:
             if len(program_dict[env.name]) > 20:
                 continue
+            # update the program dict: (1) replace with programs w/ higher reward; (2) add programs w/ same reward
             for _ in range(args.n_explore_samples):
                 result = random_explore(env, trigger_dict=trigger_dict)
                 if result is not None:
@@ -361,7 +364,7 @@ if __name__ == '__main__':
     parser.add_argument('--allow_not_contain', action='store_true')
     parser.add_argument('--allow_union_header', action='store_true')
 
-    parser.add_argument('--use_entity_link', action='store_true')
+    parser.add_argument('--use_linked_cells', action='store_true')
     parser.add_argument('--allow_min_max', action='store_true')
     parser.add_argument('--allow_sum_average', action='store_true')
 

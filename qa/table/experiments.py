@@ -356,7 +356,6 @@ def test(args):
     config = agent.config
 
     test_file = config['test_file']
-    # test_file = 'data/processed_input/test_samples_processed.jsonl'  # TODO: debug use
     print(f'loading test file [{test_file}]', file=sys.stderr)
     test_envs = load_environments(
         [test_file],

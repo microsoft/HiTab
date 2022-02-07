@@ -331,8 +331,6 @@ class HMTExecutor(object):
     # Get apis
     def get_api(self):
         func_dict = collections.OrderedDict()
-        # TODO: when adding new funcs, remember to change hard-coded action ids, e.g. random_explore.py
-
         func_dict['filter_tree_str_contain'] = dict(
             name='filter_tree_str_contain',
             args=[{'types': ['direction_index_name']}, {'types': ['header']}],

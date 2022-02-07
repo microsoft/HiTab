@@ -382,7 +382,6 @@ class LispInterpreter(object):
 
     def has_extra_work(self):
         """ Modified for hmt. Results are usually not used, so currently not extra work."""
-        # TODO: define hmt extra work. e.g. len(program) > len(gold); filter unchanged region
         return False
 
     def clone(self):

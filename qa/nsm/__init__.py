@@ -11,7 +11,7 @@ AGGR_MAP = {
     'pair-argmin': ['argmin'],
     'counta': ['count'],
     'opposite': ['opposite'],
-    'topk-argmax': ['argmax'],  # TODO: following may be not precisely match
+    'topk-argmax': ['argmax'],  # TODO: following may not be precisely matched
     'topk-argmin': ['argmin'],
     'kth-argmax': ['argmax'],
     'kth-argmin': ['argmin'],

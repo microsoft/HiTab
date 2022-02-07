@@ -179,7 +179,7 @@ def prop_in_question_score_n_gram(prop, question, stop_words, binary=True, binar
 
 
 def find_props(table_info):
-    """ Find all headers in kg."""  # TODO: currently entity not including index name.
+    """ Find all headers in kg."""
     top_root = table_info['top_root']
     left_root = table_info['left_root']
     props, num_props, datetime_props = set(), set(), set()
@@ -203,6 +203,72 @@ def iter_nodes(node, props, num_props, datetime_props):
             iter_nodes(child, props, num_props, datetime_props)
 
 
+def select_question_related_links(question, linked_cells, stop_words, related_thresh=0.4):
+    """ Reconstruct `linked_cells` with the links in/having high overlap with the question."""
+
+    def _overlap_score(question, phrase, stop_words, stemmer=SnowballStemmer('english')):
+        phrase_tks = [normalize(tk) for tk in nltk.word_tokenize(phrase) if tk not in stop_words]
+        question_tks = [normalize(tk) for tk in nltk.word_tokenize(question) if tk not in stop_words]
+        if stemmer is not None:
+            phrase_tks = [stemmer.stem(tk) for tk in phrase_tks]
+            question_tks = [stemmer.stem(tk) for tk in question_tks]
+
+        max_n_gram_length = min(len(phrase_tks), len(question_tks))
+        if max_n_gram_length == 0:
+            return 0
+
+        score = 0
+        prop_tks_set = set(phrase_tks)
+        for i in range(1, max_n_gram_length + 1):
+            question_n_grams = n_gram(question_tks, i)
+            for question_n_gram in question_n_grams:
+                if question_n_gram.issubset(prop_tks_set):
+                    score = max(score, i / len(prop_tks_set))
+                    break
+        return score
+
+    new_linked_cells = {
+        'entity_link': {
+            'top': {},
+            'left': {},
+            'top_left_corner': {}
+        },
+        'quantity_link': {}
+    }
+    for direction, direction_links in linked_cells['entity_link'].items():
+        for phrase, links in direction_links.items():
+            if phrase == '[ANSWER]':
+                new_linked_cells['entity_link'][direction][phrase] = links
+            else:
+                if phrase in question:
+                    score = 1.
+                else:
+                    score = _overlap_score(question, phrase, stop_words)
+                if score >= related_thresh:
+                    new_linked_cells['entity_link'][direction][phrase] = links
+                # else:
+                #     ic('Not match')
+                #     ic(question)
+                #     ic(phrase)
+                #     ic(score)
+    for phrase, links in linked_cells['quantity_link'].items():
+        if phrase == '[ANSWER]':
+            new_linked_cells['quantity_link'][phrase] = links
+        else:
+            if phrase in question:
+                score = 1.
+            else:
+                score = _overlap_score(question, phrase, stop_words)
+            if score >= related_thresh:
+                new_linked_cells['quantity_link'][phrase] = links
+            # else:
+            #     ic('Not match')
+            #     ic(question)
+            #     ic(phrase)
+            #     ic(score)
+    return new_linked_cells
+
+
 def collect_examples_from_dict(args, sample_dict, table_dict, stop_words):
     """ Construct MAPO input examples."""
     example_linked_list = []
@@ -223,7 +289,10 @@ def collect_examples_from_dict(args, sample_dict, table_dict, stop_words):
         e['processed_tokens'] = tks[:]
         e['in_table'] = [0] * len(tks)
         # some annotations beneficial for partial supervision
-        e['linked_cells'] = sample['linked_cells']
+        ic(sample['table_id'])
+        ic(sample['sentence_id'])
+        ic(sample['sub_sentence_id'])
+        e['linked_cells'] = select_question_related_links(sample['question'], sample['linked_cells'], stop_words)
         e['aggregation'] = sample['aggregation']
 
         for i, (tk, tag, val) in enumerate(zip(tks, tags, vals)):
@@ -543,7 +612,7 @@ def main():
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('--root_dir', type=str, default='/MY_PATH_TO/HiTab/')
+    parser.add_argument('--root_dir', type=str, default='/mnt/zhoujun/HMT-release')
     parser.add_argument('--data_dir', type=str, default='data/')
     parser.add_argument('--processed_input_dir', type=str, default='processed_input/', help='processed input directory')
     parser.add_argument('--n_train_shard', type=int, default=90, help='num of shards of train splits')
