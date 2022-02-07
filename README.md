@@ -1,6 +1,6 @@
 # HiTab : A Hierarchical Table Dataset for Question Answering and Natural Language Generation
 
-HiTab is a dataset for question answering and data-to-text over hierarchical tables . It contains 10,686 samples and 3,597 tables from statistical reports ([StatCan](https://www.statcan.gc.ca/), [NSF](https://www.nsf.gov/)) and Wikipedia ([ToTTo](https://github.com/google-research-datasets/ToTTo)).  98.1% of the tables in HiTab are with hierarchies.  You can find more details in [our paper](https://arxiv.org/abs/2108.06712).
+HiTab is a dataset for question answering and data-to-text over hierarchical tables . It contains 10,672 samples and 3,597 tables from statistical reports ([StatCan](https://www.statcan.gc.ca/), [NSF](https://www.nsf.gov/)) and Wikipedia ([ToTTo](https://github.com/google-research-datasets/ToTTo)).  98.1% of the tables in HiTab are with hierarchies.  You can find more details in [our paper](https://arxiv.org/abs/2108.06712).
 
 During the dataset annotation process, annotators first manually collect tables and  descriptive sentences highly-related to tables on statistical websites written by professional analysts. And then these descriptions are revised to questions to preserve the original meanings and analyses.
 
@@ -10,7 +10,8 @@ We hope HiTab can serve as a useful benchmark for table understanding on hierarc
 
 ## :beers: Updates
 
-+ **Stay tuned!**: Code of data2text.
++ **Stay tuned**: Code of data2text.
++ **2021-2-7**: We released the final version of HiTab data. Please feel free to explore it!
 + **2021-12-6**: We released code of question answering and a new version HiTab data. 
 Several modifications on data: (1) more precise hierarchies are derived for \~3\% tables with new heuristic algorithms; 
 (2) fix the problem that \~0.6\% tables ranges were not correctly extracted from original excel file; 
@@ -179,7 +180,9 @@ The cell coordinates above are under the coordinate system of the table matrix p
 }
 ```
 
-`texts` is the complete table matrix consisting $M$ rows and $N$ columns. `merged_regions` lists all the merged cells. If a cell is a merged cells, only its **core cell**  (the top left position in the merged cell) will have content in `texts`, and others will be empty.
+`texts` is the complete table matrix consisting M rows and N columns. `merged_regions` lists all the merged cells. If a cell is a merged cells, only its **core cell**  (the top left position in the merged cell) will have content in `texts`, and others will be empty.
+
+The tables in `tables/hmt/` directory are an adapted version to the hierarchical matrix table data structure customized for hierarchy-aware logical form, which basically contain the same information as the data format above.
 
 
 ## Question Answering
@@ -188,22 +191,23 @@ and [TaBERT](https://github.com/facebookresearch/TaBERT).
 
 Weakly supervised Table QA usually requires consistent programs for warm start and alignments between question and table schemas or headers as input features,
 which we already provide as `data/explore/saved_programs.json`, and `data/processed_input/`. 
+
 Users can also start with raw data format, i.e. `data/*_samples.jsonl`, by searching programs with `qa/table/random_explore.py` and extract question-table alignments with `qa/datadump/process_input.py`.
 
 
 ### Quick Start
-Here is a very quick start script for "MAPO with hierarchical-aware logical form" method in HiTab paper.
+Here is a very quick start script for "MAPO with hierarchical-aware logical form" method in HiTab paper using our processed data.
 ```shell
 # unzip table files
 unzip -d data/ data/tables.zip
-# set 'MY_PATH_TO' in config as the path to the project
+# set 'MY_PATH_TO' in config as the path to the project (similarly for partial supervision)
 vim qa/config/config.vanilla_bert.json
 # train
 bash train_hmtqa.sh
 # test
 bash test_hmtqa.sh
 ```
-The training takes \~10 hours on 4 V100 GPUs.
+The training phase takes \~10 hours on 4 V100 GPUs. In the latest version dataset, we have fixed some unreliable question answering pairs and improved the algorithm for hierarchy extraction, thus the qa accuracy will be slightly higher than those reported in the paper.
 
 
 ## Reference
