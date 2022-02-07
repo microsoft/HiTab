@@ -195,7 +195,7 @@ Users can also start with raw data format, i.e. `data/*_samples.jsonl`, by searc
 Here is a very quick start script for "MAPO with hierarchical-aware logical form" method in HiTab paper.
 ```shell
 # unzip table files
-unzip data/ data/tables.zip
+unzip -d data/ data/tables.zip
 # set 'MY_PATH_TO' in config as the path to the project
 vim qa/config/config.vanilla_bert.json
 # train
