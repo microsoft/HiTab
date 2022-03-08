@@ -7,6 +7,9 @@ During the dataset annotation process, annotators first manually collect tables 
 We hope HiTab can serve as a useful benchmark for table understanding on hierarchical tables. 
 
 
+### Note
+In the latest version dataset, we have improved the algorithm for hierarchy extraction and fixed some unreliable question answering pairs, thus the qa and data2text performance will be slightly higher than the results reported in the paper. We show more details in qa and data2text descriptions.
+
 
 ## :beers: Updates
 
@@ -18,7 +21,6 @@ Several modifications on data: (1) more precise hierarchies are derived for \~3\
 (3) temporarily set aside \~1.5\% samples for further check containing unreliable answers or aggregations, which hopefully won't affect evaluating new methods due to the small proportion. 
 We'll release the final version HiTab version after checking. Thank you for your patience.
 + **2021-9-2**: We released full HiTab data, including (1) question answering and data2text samples, (2) tables with parsed hierarchies.
-
 
 
 ## Dataset Description
@@ -186,13 +188,14 @@ The tables in `tables/hmt/` directory are an adapted version to the hierarchical
 
 
 ## Question Answering
+
 The question answering codebase references [pytorch version of MAPO](https://github.com/pcyin/pytorch_neural_symbolic_machines) 
-and [TaBERT](https://github.com/facebookresearch/TaBERT). 
+and [TaBERT](https://github.com/facebookresearch/TaBERT). Many respects and thanks for [PengCheng Yin](https://pcyin.me/)'s great work!
 
 Weakly supervised Table QA usually requires consistent programs for warm start and alignments between question and table schemas or headers as input features,
 which we already provide as `data/explore/saved_programs.json`, and `data/processed_input/`. 
 
-Users can also start with raw data format, i.e. `data/*_samples.jsonl`, by searching programs with `qa/table/random_explore.py` and extract question-table alignments with `qa/datadump/process_input.py`.
+Users can also start with raw data format, i.e. `data/*_samples.jsonl`, by searching programs with `qa/table/random_explore.py` and extract question-table alignments with `qa/datadump/process_input.py`. The detailed usage of console arguments can be found in the code files.
 
 
 ### Quick Start
@@ -207,7 +210,14 @@ bash train_hmtqa.sh
 # test
 bash test_hmtqa.sh
 ```
-The training phase takes \~10 hours on 4 V100 GPUs. In the latest version dataset, we have fixed some unreliable question answering pairs and improved the algorithm for hierarchy extraction, thus the qa accuracy will be slightly higher than those reported in the paper.
+The training phase takes \~10 hours on 4 V100 GPUs. 
+
+If needed, we provide the baseline "MAPO with hierarchical-aware logical form" [model checkpoint](https://drive.google.com/file/d/1_S5yQ2gKH7U3v-7Aa7m55NL1lmxmhh4U/view?usp=sharing), which achieves 45.5% on dev set and 42.3% on test set. Both are sligtly higher than the results in paper due to the updated dataset. We also find that disabling trigger words in training may increase accuracy at the cost of much higher spurious program rate, thus we choose to retain the trigger words.
+
+
+## Data2text
+
+[TODO]
 
 
 ## Reference
