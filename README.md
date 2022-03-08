@@ -14,6 +14,7 @@ In the latest version dataset, we have improved the algorithm for hierarchy extr
 ## :beers: Updates
 
 + **Stay tuned**: Code of data2text.
++ **2021-2-24**: HiTab is accepted by ACL 2022 main conference.
 + **2021-2-7**: We released the final version of HiTab data. Please feel free to explore it!
 + **2021-12-6**: We released code of question answering and a new version HiTab data. 
 Several modifications on data: (1) more precise hierarchies are derived for \~3\% tables with new heuristic algorithms; 
