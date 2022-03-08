@@ -196,7 +196,7 @@ and [TaBERT](https://github.com/facebookresearch/TaBERT). Many respects and than
 Weakly supervised Table QA usually requires consistent programs for warm start and alignments between question and table schemas or headers as input features,
 which we already provide as `data/explore/saved_programs.json`, and `data/processed_input/`. 
 
-Users can also start with raw data format, i.e. `data/*_samples.jsonl`, by searching programs with `qa/table/random_explore.py` and extract question-table alignments with `qa/datadump/process_input.py`. The detailed usage of console arguments can be found in the code files.
+Users can also start with raw data format, i.e. `data/*_samples.jsonl`, by searching programs with `qa/table/random_explore.py` and extracting question-table alignments with `qa/datadump/process_input.py`. The detailed usage of console arguments can be found in the code files.
 
 
 ### Quick Start
