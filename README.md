@@ -13,7 +13,7 @@ In the latest version dataset, we have improved the algorithm for hierarchy extr
 
 ## :beers: Updates
 
-+ **Stay tuned**: Code of data2text.
++ **2022-5-28**: Code for data-to-text experiments is now available. 
 + **2022-3-8**: HiTab is accepted to ACL 2022 main conference.
 + **2022-2-7**: We released the final version of HiTab data. Please feel free to explore it!
 + **2021-12-6**: We released code of question answering and a new version HiTab data. 
