@@ -12,8 +12,10 @@ In the latest version dataset, we have improved the algorithm for hierarchy extr
 
 
 ## :beers: Updates
-+ **2024-11-12**: [“Encoding Spreadsheets for Large Language Models”](https://arxiv.org/pdf/2407.09025) at EMNLP 2024.
++ **2025-2-6**: Original annotations with Excel spreadsheet files using formulas are uploaded. 
++ **2024-11-12**: [“SpreadsheetLLM: Encoding Spreadsheets for Large Language Models”](https://arxiv.org/pdf/2407.09025) at EMNLP 2024.
 + **2024-7-15**: [A tutorial on “Large Language Models for Tabular Data”](https://github.com/HaoAreYuDong/Large-Language-Models-for-Tabular-Data/) at SIGIR 2024.
++ **2024-7-12**: [“SpreadsheetLLM: Encoding Spreadsheets for Large Language Models”](https://arxiv.org/pdf/2407.09025) at arXiv.
 + **2022-7-23**: [A survey on “Table Pretraining: A Survey on Model Architectures, Pretraining Objectives, and Downstream Tasks”](https://arxiv.org/pdf/2201.09745) at IJCAI 2022.
 + **2022-5-28**: Code for data-to-text experiments is now available. 
 + **2022-3-8**: HiTab is accepted to ACL 2022 main conference.
