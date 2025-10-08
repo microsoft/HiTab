@@ -12,6 +12,7 @@ In the latest version dataset, we have improved the algorithm for hierarchy extr
 
 
 ## :beers: Updates
++ **2025-10-08**: Based on community feedback, an additional round of quality inspection has been completed — see details in [data/quality_check.md](data/quality_check.md).
 + **2025-2-6**: Original annotations with Excel spreadsheet files using formulas are uploaded. 
 + **2024-11-12**: [“SpreadsheetLLM: Encoding Spreadsheets for Large Language Models”](https://arxiv.org/pdf/2407.09025) at EMNLP 2024.
 + **2024-7-15**: [A tutorial on “Large Language Models for Tabular Data”](https://github.com/HaoAreYuDong/Large-Language-Models-for-Tabular-Data/) at SIGIR 2024.
@@ -292,4 +293,5 @@ This dataset follows the Computational Use of Data Agreement v1.0.
 ## Contact
 
 If you have any question regarding HiTab dataset or publication, please create an issue in this repository.  You can also reach us by e-mail addresses in the paper.
+
 
